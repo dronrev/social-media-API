@@ -38,6 +38,8 @@ class PostController extends Controller
         return response()->json($res,200)->header('Content-Type','application/json');
     }
 
+    
+
     public function bro(Post $post){
         return response()->json($post->check_post());
     }

@@ -10,8 +10,9 @@ use Illuminate\Support\Facades\DB;
 
 class LikeController extends Controller
 {
-//
-    public function like(Request $request, Post $post){
+    //
+    public function like(Request $request, Post $post)
+    {
         $input = $request->validate([
             'post_id' => 'required',
             'user_id' => 'required'
@@ -19,13 +20,13 @@ class LikeController extends Controller
 
 
         $checking = DB::table('likes')
-        ->select('likes.*')
-        ->where('likes.user_id','=',$input['user_id'])
-        ->where('likes.post_id','=',$input['post_id'])
-        ->get();
+            ->select('likes.*')
+            ->where('likes.user_id', '=', $input['user_id'])
+            ->where('likes.post_id', '=', $input['post_id'])
+            ->get();
 
         // $checking = $post->likedBy($request->input('user_id'));
-        if($checking->count() == 0){
+        if ($checking->count() == 0) {
             Like::create($input);
         }
 
@@ -35,16 +36,13 @@ class LikeController extends Controller
         ]);
     }
 
-    public function unlike(Request $request){
-        $unliked = DB::table('likes')
-        ->select('likes.*')
-        ->where('user_id',$request->input('user_id'))
-        ->where('post_id',$request->input('post_id'))
-        ->get();
+    public function unlike(Request $request)
+    {
+        $delete_like = Like::where('user_id', $request->input('user_id'))
+            ->where('post_id', $request->input('post_id'))
+            ->first();
 
-        $delete_like = Like::find($unliked[0]->id);
-
-        if($delete_like->delete()){
+        if ($delete_like->delete()) {
             $res = [
                 'message' => 'Post Unliked',
                 'success' => 1,
